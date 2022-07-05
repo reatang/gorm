@@ -217,7 +217,6 @@ func (db *DB) Session(config *Session) *DB {
 			Config:    &txConfig,
 			Statement: db.Statement,
 			Error:     db.Error,
-			clone:     1,
 		}
 	)
 	if config.CreateBatchSize > 0 {
@@ -266,7 +265,9 @@ func (db *DB) Session(config *Session) *DB {
 		txConfig.DisableNestedTransaction = true
 	}
 
-	if !config.NewDB {
+	if config.NewDB {
+		tx.clone = 1
+	} else {
 		tx.clone = 2
 	}
 
